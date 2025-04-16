@@ -222,3 +222,77 @@ class Aerolinea{
         return $promedio;
     }
 }
+class Aeropuerto{
+    private $denominacion;
+    private $direccion;
+    private $aerolineas;
+    
+
+
+	public function __construct($denominacion, $direccion) {
+		$this->denominacion = $denominacion;
+		$this->direccion = $direccion;
+		$this->aerolineas = [];
+	}
+
+	public function getDenominacion() {
+		return $this->denominacion;
+	}
+	public function setDenominacion($val) {
+		$this->denominacion = $val;
+	}
+
+	public function getDireccion() {
+		return $this->direccion;
+	}
+	public function setDireccion($val) {
+		$this->direccion = $val;
+	}
+
+	public function getAerolineas() {
+		return $this->aerolineas;
+	}
+	public function setAerolineas($val) {
+		$this->aerolineas[] = $val;
+	}
+
+    public function retornarVuelosAerolinea($aerolinea){
+        $vuelosAerolinea = [];
+        foreach ($aerolinea->getVuelosProgramados() as $vuelos) {
+            if ($vuelos->getNombre() == $aerolinea) {
+                $vuelosAerolinea[] = $vuelos;
+            }
+        }
+        return $vuelosAerolinea;
+    }
+
+    public function ventaAutomatica($cantAsientos, $fecha, $destino){
+        $venta = false;
+        foreach ($this->getAerolineas() as $aeros) {
+            foreach ($aeros->getVuelosProgramados() as $vuelos) {
+                if ($vuelos->getDestino() == $destino && $vuelos->getFecha() == $fecha && $vuelos->asignarAsientosDisponibles($cantAsientos)) {
+                    $venta = true;
+                }
+            }
+        }
+        return $venta;
+    }
+
+    public function promedioRecaudadoXAerolinea($idAerolinea){
+        $promAerolinea = 0;
+        foreach ($this->getAerolineas() as $aeros) {
+            if ($aeros->getIdentificacion() == $idAerolinea) {
+                $promAerolinea = $aeros->montoPromedioRecaudado();
+            }
+        }
+        return $promAerolinea;
+    }
+
+    public function __toString(){
+        $aero = "";
+        foreach ($this->getAerolineas() as $valor) {
+            $aero .= $valor . "\n";
+        }
+        return "Denominación: " . $this->getDenominacion() . "\nDirección: " . $this->getDireccion() . "\nAerolineas: " . $aero; 
+    }
+}
