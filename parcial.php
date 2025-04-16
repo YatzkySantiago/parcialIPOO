@@ -148,3 +148,77 @@ class Vuelo{
         return $respuesta;
     }
 }
+class Aerolinea{
+    private $identificacion;
+    private $nombre;
+    private $vuelosProgramados;
+
+	public function __construct($identificacion, $nombre) {
+		$this->identificacion = $identificacion;
+		$this->nombre = $nombre;
+		$this->vuelosProgramados = [];
+	}
+
+
+	public function getIdentificacion() {
+		return $this->identificacion;
+	}
+	public function setIdentificacion($val) {
+		$this->identificacion = $val;
+	}
+
+	public function getNombre() {
+		return $this->nombre;
+	}
+	public function setNombre($val) {
+		$this->nombre = $val;
+	}
+
+	public function getVuelosProgramados() {
+		return $this->vuelosProgramados;
+	}
+	public function setVuelosProgramados($val) {
+		$this->vuelosProgramados[] = $val;
+	}
+
+    public function darVueloADestino($destino, $cantAsientos){
+        $colVuelos = array();
+        foreach ($this->getVuelosProgramados() as $unObjVuelo) {
+            if ($unObjVuelo->getDestino() == $destino && $cantAsientos <= $unObjVuelo->getAsientosDisponibles()) {
+                $colVuelos[] = $unObjVuelo;
+            }
+        }
+        return $colVuelos;
+    }
+
+    public function incorporarVuelo($objVuelo){
+        $respuesta = false;
+        foreach ($this->getVuelosProgramados() as $vuelos) {
+            if ($vuelos->getDestino() == $objVuelo->getDestino() && $vuelos->getFecha() != $objVuelo->getFecha()) {
+                $this->setVuelosProgramados($objVuelo);
+                $respuesta = true;
+            }
+        }
+        return $respuesta;
+    }
+
+    public function venderVueloADestino($cantAsientos, $destino, $fecha){
+        $respuesta = null;
+        foreach ($this->getVuelosProgramados as $vuelos) {
+            if ($destino == $vuelos->getDestino() && $vuelos->asignarAsientosDisponibles($cantAsientos)) {
+                $respuesta = $vuelos;
+            }
+        }
+        return $respuesta;
+    }
+
+    public function montoPromedioRecaudado(){
+        $promedio = 0;
+        $total = 0;
+        foreach ($this->getVuelosProgramados as $vuelos) {
+            $total = $total + $vuelos->getImporte();
+            $promedio = $total / count($this->getVuelosProgramados);
+        }
+        return $promedio;
+    }
+}
