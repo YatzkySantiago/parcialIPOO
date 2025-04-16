@@ -227,9 +227,7 @@ class Aeropuerto{
     private $direccion;
     private $aerolineas;
     
-
-
-	public function __construct($denominacion, $direccion) {
+	public function __construct($denominacion, $direccion, $aerolineas) {
 		$this->denominacion = $denominacion;
 		$this->direccion = $direccion;
 		$this->aerolineas = [];
@@ -275,7 +273,7 @@ class Aeropuerto{
                 }
             }
         }
-        return $venta;
+        return $venta ? "realizado" : "error";
     }
 
     public function promedioRecaudadoXAerolinea($idAerolinea){
